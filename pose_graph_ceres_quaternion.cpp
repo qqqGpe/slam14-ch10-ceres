@@ -19,7 +19,8 @@ typedef struct {
     double t[3], q[4];
 } param_type;
 
-
+//-----------------------------------------------------------------------------------------------------------------
+// 这里为工具函数，参考的 VINS—Fusion，初次接触可以暂时跳过，只要知道函数功能即可
 template <typename Derived>
 static Eigen::Quaternion<typename Derived::Scalar> deltaQ(const Eigen::MatrixBase<Derived> &theta)
 {
@@ -70,7 +71,9 @@ static Eigen::Matrix<typename Derived::Scalar, 4, 4> Qright(const Eigen::Quatern
     ans.template block<3, 1>(1, 0) = pp.vec(), ans.template block<3, 3>(1, 1) = pp.w() * Eigen::Matrix<typename Derived::Scalar, 3, 3>::Identity() - skewSymmetric(pp.vec());
     return ans;
 }
+//-----------------------------------------------------------------------------------------------------------------
 
+// Manifold，因为四元数为嵌入在四维空间上的三维流型，所以这里需要计算四元数对应的加法和Jacobian
 class PoseLocalParameterization : public ceres::LocalParameterization
 {
     virtual bool Plus(const double *x, const double *delta, double *x_plus_delta) const{
@@ -92,6 +95,7 @@ class PoseLocalParameterization : public ceres::LocalParameterization
     virtual int LocalSize() const { return 3; };
 };
 
+// 处理读入的数据
 void Convert2qt(param_type &p){
     p.t[0] = p.param[0];
     p.t[1] = p.param[1];
@@ -103,7 +107,7 @@ void Convert2qt(param_type &p){
     p.q[3] = p.param[6]; // qw
 }
 
-
+//位置图相关的 CostFunction
 class PoseGraphCostFunction: public ceres::SizedCostFunction<6, 3, 4, 3, 4>{
 public:
     PoseGraphCostFunction(Quaterniond q_m, Vector3d t_m, Matrix6d cov): q_m(q_m), t_m(t_m), covariance(cov){}
@@ -192,14 +196,13 @@ int main(int argc, char** argv){
             Vector3d t_m = {m[0], m[1], m[2]};
 
             Matrix6d covariance;
-            for(int i = 0; i < 6 && fin.good(); i++){
-                for(int j = i; j < 6 && fin.good(); j++){
-                    fin >> covariance(i,j);
-                    if(j != i) covariance(j,i) = covariance(i,j);
-                }
-            }
-            ceres::LossFunction *loss = new ceres::HuberLoss(1.0);
-//            ceres::LossFunction *loss = nullptr;
+//            for(int i = 0; i < 6 && fin.good(); i++){
+//                for(int j = i; j < 6 && fin.good(); j++){
+//                    fin >> covariance(i,j);
+//                    if(j != i) covariance(j,i) = covariance(i,j);
+//                }
+//            }
+            ceres::LossFunction *loss = new ceres::HuberLoss(1.0); 
             ceres::CostFunction *costfunc = new PoseGraphCostFunction(q_m, t_m, covariance);
             problem.AddResidualBlock(costfunc, loss,
                                      param[vertex_i].t, param[vertex_i].q,
