@@ -202,7 +202,7 @@ int main(int argc, char** argv){
 //                    if(j != i) covariance(j,i) = covariance(i,j);
 //                }
 //            }
-            ceres::LossFunction *loss = new ceres::HuberLoss(1.0); 
+            ceres::LossFunction *loss = new ceres::HuberLoss(1.0);
             ceres::CostFunction *costfunc = new PoseGraphCostFunction(q_m, t_m, covariance);
             problem.AddResidualBlock(costfunc, loss,
                                      param[vertex_i].t, param[vertex_i].q,
