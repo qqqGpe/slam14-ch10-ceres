@@ -22,5 +22,6 @@ make
 ## 查看优化结果
 ```
 cd results
-g2o_viewer
+g2o_viewer XXX_result.g2o
 ```
+![Alt text](image.png)
