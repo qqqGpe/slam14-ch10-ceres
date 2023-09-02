@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 
     google::InitGoogleLogging(argv[0]);
 
-    string fin_path = "/home/gao/Cpp_Projects/slambook2-master/ch10_ceres/sphere.g2o";
+    string fin_path = "sphere.g2o";
 
     ceres::Problem problem;
     vector<param_type> param;
@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
 //    std::cout << "Hello, World!" << std::endl;
 
 //    std::cout<<summary.FullReport() <<std::endl;
-    std::ofstream txt("/home/gao/Cpp_Projects/slambook2-master/ch10_ceres/result.g2o");
+    std::ofstream txt("results/ceres_lie_result.g2o");
     for( int i=0; i < param.size(); i++ )
     {
         Eigen::Map<const Eigen::Matrix<double,6,1>> poseAVec6d( param[i].se3 );

@@ -1,0 +1,32 @@
+{
+    "files.associations": {
+        "core": "cpp",
+        "*.ipp": "cpp",
+        "atomic": "cpp",
+        "*.tcc": "cpp",
+        "bitset": "cpp",
+        "chrono": "cpp",
+        "complex": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "optional": "cpp",
+        "algorithm": "cpp",
+        "random": "cpp",
+        "fstream": "cpp",
+        "functional": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "limits": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "ostream": "cpp",
+        "ratio": "cpp",
+        "streambuf": "cpp",
+        "string_view": "cpp",
+        "type_traits": "cpp",
+        "tuple": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp",
+        "*.txx": "cpp"
+    }
+}
